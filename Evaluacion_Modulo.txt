@@ -1,0 +1,59 @@
+-------------Aquellas usadas para insertar, modificar y eliminar un Customer, Staff y Actor.
+---insertar
+
+INSERT INTO customer (store_id,first_name,last_name,email,address_id,activebool,create_date,last_update,active) 
+VALUES (2,'Raggnar','Lodbrok','chamakito_vikingo@valhalla.tk',9,'t','2006-02-14','2013-05-26 11:49:45.738',1);
+
+INSERT INTO staff (first_name,last_name,address_id,email,store_id,active,username,password,last_update,picture) 
+VALUES ('Frank','Stallone',5,'sylvester_te_odio@lol.org',3,'t','Frank','8cb2237d0679ca88db6464eac60da96345513964','2006-05-16 16:13:11.79328','\x89504e470d0a5a0a');
+
+INSERT INTO actor (first_name,last_name,last_update) 
+VALUES ('Tripa','Seca','2013-05-26 14:47:57.62');
+
+---Modificar
+UPDATE customer SET email ='sincorreo@lol.org' WHERE first_name = 'RAGGNAR';
+UPDATE staff SET email ='sincorreo@lol.org' WHERE first_name = 'Frank' AND last_name = 'Stallone';
+UPDATE actor SET first_name = 'Ramon', last_name ='Valdez' WHERE first_name = 'Tripa' AND last_name ='Seca';
+
+---Eliminar
+DELETE FROM customer WHERE customer_id = 550;
+DELETE FROM staff WHERE store_id = 3;
+DELETE FROM actor WHERE last_update < '1990-01-01 00:00:00.0';
+
+
+-------------Listar todas las “rental” con los datos del “customer” dado un año y mes.
+SELECT 
+cu.first_name AS FirstName, 
+cu.last_name AS LastName, 
+cu.email AS Email, 
+re.rental_id AS Rental_ID,
+re.inventory_id AS Inventory_ID,
+re.rental_date AS Rental_Date
+FROM customer cu
+JOIN rental re
+ON cu.customer_id = re.customer_id
+WHERE EXTRACT(MONTH FROM re.rental_date) = 6 AND EXTRACT(YEAR FROM re.rental_date) = 2005;
+
+-------------Listar Número, Fecha (payment_date) y Total (amount) de todas las “payment”.
+SELECT 
+payment_id AS numero, 
+payment_date AS fecha, 
+amount AS Total 
+FROM payment; 
+
+-------------Listar todas las “film” del año 2006 que contengan un (rental_rate) mayor a 4.0.
+SELECT * FROM film WHERE release_year = 2006 AND rental_rate > 4.00;
+
+-------------Realiza un Diccionario de datos que contenga el nombre de las tablas y columnas, si
+-------------éstas pueden ser nulas, y su tipo de dato correspondiente (Resultado en archivo.CSV)
+SELECT 
+table_name AS "Nombre_Tabla",
+column_name AS "Nombre_Columna",
+data_type AS "Tipo_Dato",
+is_nullable AS "Es_Nulo"
+FROM information_schema.columns
+WHERE table_schema = 'public' 
+AND table_name IN('actor','store','address','category','city','country','customer','film_actor','film_category','inventory','language','rental','staff','payment','film');
+
+
+
